@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Box, Flex, Stack, Button, Input } from "@chakra-ui/react";
 import axios from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import TodoItem from "./components/TodoItem";
 
 function App() {
   const queryClient = useQueryClient();
   const [newTodoTitle, setNewTodoTitle] = useState("");
-  console.log(newTodoTitle);
 
   // Get All todos
   const getTodosQuery = useQuery({
@@ -63,6 +63,15 @@ function App() {
         </Flex>
         <br></br>
         <Box>Your Todos:</Box>
+        <Stack>
+          {getTodosQuery.isSuccess && getTodosQuery.data.length > 0 ? (
+            getTodosQuery.data.map((todo) => {
+              return <TodoItem {...todo} />;
+            })
+          ) : (
+            <Box>No Todos Yet!</Box>
+          )}
+        </Stack>
       </Stack>
     </Box>
   );
