@@ -63,7 +63,13 @@ function App() {
             value={newTodoTitle}
             onChange={(e) => setNewTodoTitle(e.target.value)}
           />
-          <Button onClick={handleAddTodo}>Add New Todo</Button>
+          <Button
+            onClick={handleAddTodo}
+            colorScheme="green"
+            isLoading={createTodoMutation.isPending}
+          >
+            Add New Todo
+          </Button>
         </Flex>
         <br></br>
         <Text align={"center"}>Your Todos</Text>
