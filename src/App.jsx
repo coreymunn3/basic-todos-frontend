@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Flex, Stack, Button, Input } from "@chakra-ui/react";
+import { Box, Flex, Stack, Button, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import TodoItem from "./components/TodoItem";
@@ -48,7 +48,7 @@ function App() {
   };
 
   return (
-    <Box padding={"1rem"}>
+    <Box padding={"1rem"} maxWidth={"600px"} margin="auto">
       <Stack>
         <Flex>
           <Input
@@ -62,7 +62,7 @@ function App() {
           <Button onClick={handleAddTodo}>Add New Todo</Button>
         </Flex>
         <br></br>
-        <Box>Your Todos:</Box>
+        <Text align={"center"}>Your Todos</Text>
         <Stack>
           {getTodosQuery.isSuccess && getTodosQuery.data.length > 0 ? (
             getTodosQuery.data.map((todo) => {
