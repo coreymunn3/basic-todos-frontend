@@ -18,7 +18,7 @@ const queryClient = new QueryClient({
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ChakraProvider>
+    <ChakraProvider toastOptions={{ defaultOptions: { position: "bottom" } }}>
       <QueryClientProvider client={queryClient} contextSharing={true}>
         <App />
         <ReactQueryDevtools initialIsOpen={false} />

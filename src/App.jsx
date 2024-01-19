@@ -1,11 +1,20 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getTodos, createTodo } from "./api";
-import { Box, Flex, Stack, Button, Input, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Stack,
+  Button,
+  Input,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import TodoItem from "./components/TodoItem";
 
 function App() {
   const queryClient = useQueryClient();
+  const toast = useToast();
   const [newTodoTitle, setNewTodoTitle] = useState("");
 
   // Get All todos
@@ -20,6 +29,13 @@ function App() {
     mutationFn: createTodo,
     // refetch the todos query after the mutation succeeds
     onSuccess: () => {
+      toast({
+        title: "Added successfully",
+        variant: "subtle",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
       queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
   });
@@ -54,7 +70,7 @@ function App() {
         <Stack>
           {getTodosQuery.isSuccess && getTodosQuery.data.length > 0 ? (
             getTodosQuery.data.map((todo) => {
-              return <TodoItem {...todo} />;
+              return <TodoItem todo={todo} key={todo.id} />;
             })
           ) : (
             <Box>No Todos Yet!</Box>
