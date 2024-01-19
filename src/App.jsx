@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Box, Flex, Stack, Button, Input, Text } from "@chakra-ui/react";
-import axios from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getTodos, createTodo } from "./api";
+import { Box, Flex, Stack, Button, Input, Text } from "@chakra-ui/react";
 import TodoItem from "./components/TodoItem";
 
 function App() {
@@ -11,19 +11,13 @@ function App() {
   // Get All todos
   const getTodosQuery = useQuery({
     queryKey: ["todos"],
-    queryFn: async () => {
-      const res = axios.get("http://localhost:5000/api/todo");
-      return res;
-    },
+    queryFn: getTodos,
   });
 
   // Add a Todo
   const createTodoMutation = useMutation({
     mutationKey: ["add todo"],
-    mutationFn: async (newTodo) => {
-      console.log(newTodo);
-      await axios.post("http://localhost:5000/api/todo", newTodo);
-    },
+    mutationFn: createTodo,
     // refetch the todos query after the mutation succeeds
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
@@ -32,14 +26,8 @@ function App() {
 
   /**
    * Callback run when the user clicks the "Add Todo" button
-   *
-   * This function adds a todo by using the mutation above then resets
-   * the input field to an empty string
-   * @param {Object} newTodo
-   * @param {string} newTodo.title The title of the todo
-   * @param {boolean} newTodo.completed is it complete?
    */
-  const handleAddTodo = (newTodo) => {
+  const handleAddTodo = (e) => {
     createTodoMutation.mutate({
       title: newTodoTitle,
       completed: false,
