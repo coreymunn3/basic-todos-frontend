@@ -10,9 +10,9 @@ export const createTodo = async (newTodo) => {
 };
 
 export const editTodo = async (todo) => {
-  await axios.put(`http://localhost:5000/api/todo/${todo.id}`);
+  await axios.put(`http://localhost:5000/api/todo/${todo.id}`, todo);
 };
 
-export const deleteTodo = async (todo) => {
-  await axios.delete(`http://localhost:5000/api/todo/${todo.id}`);
+export const deleteTodo = async (id) => {
+  await axios.delete(`http://localhost:5000/api/todo/${id}`);
 };
