@@ -16,3 +16,8 @@ export const editTodo = async (todo) => {
 export const deleteTodo = async (id) => {
   await axios.delete(`http://localhost:5000/api/todo/${id}`);
 };
+
+export const reorderTodo = async (args) => {
+  const { id, direction } = args;
+  await axios.put(`http://localhost:5000/api/todo/${id}/${direction}`, {});
+};

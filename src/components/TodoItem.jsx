@@ -25,7 +25,7 @@ import {
   TriangleDownIcon,
 } from "@chakra-ui/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { editTodo, deleteTodo } from "../api";
+import { editTodo, deleteTodo, reorderTodo } from "../api";
 
 const TodoItem = (props) => {
   const { todo } = props;
@@ -36,9 +36,9 @@ const TodoItem = (props) => {
   const initRef = useRef();
 
   const editTodoMutation = useMutation({
-    mutationKey: ["edit todo"],
+    mutationKey: ["todo", "edit"],
     mutationFn: editTodo,
-    onSuccess: () => {
+    onSettled: () => {
       toast({
         title: "Updated successfully",
         variant: "subtle",
@@ -60,9 +60,9 @@ const TodoItem = (props) => {
   });
 
   const deleteTodoMutation = useMutation({
-    mutationKey: ["delete todo"],
+    mutationKey: ["todo", "delete"],
     mutationFn: deleteTodo,
-    onSuccess: () => {
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
     onError: () => {
@@ -75,23 +75,34 @@ const TodoItem = (props) => {
     },
   });
 
+  const reorderTodoMutation = useMutation({
+    mutationKey: ["todo", "reorder"],
+    mutationFn: reorderTodo,
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
+  });
+
   const handleEditTodo = (todo) => {
     editTodoMutation.mutate(todo);
   };
-
   const handleDeleteTodo = (id) => {
     deleteTodoMutation.mutate(id);
   };
-
   const handleUpdateTitle = (e) => {
     setNewTitle(e.target.value);
   };
-
   const handleUpdateCheck = (e) => {
     handleEditTodo({
       ...todo,
       completed: e.target.checked,
     });
+  };
+  const handleMoveUp = (id) => {
+    reorderTodoMutation.mutate({ id, direction: "up" });
+  };
+  const handleMoveDown = (id) => {
+    reorderTodoMutation.mutate({ id, direction: "down" });
   };
 
   return (
@@ -105,6 +116,7 @@ const TodoItem = (props) => {
                 color={"gray.300"}
                 size="xxs"
                 icon={<TriangleUpIcon />}
+                onClick={() => handleMoveUp(todo.id)}
               />
             </Tooltip>
             <Tooltip label="Move Down">
@@ -113,6 +125,7 @@ const TodoItem = (props) => {
                 color={"gray.300"}
                 size="xxs"
                 icon={<TriangleDownIcon />}
+                onClick={() => handleMoveDown(todo.id)}
               />
             </Tooltip>
           </Flex>
