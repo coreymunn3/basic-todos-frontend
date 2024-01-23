@@ -75,13 +75,9 @@ function App() {
         <Text align={"center"}>Your Todos</Text>
         <Stack>
           {getTodosQuery.isSuccess && getTodosQuery.data.length > 0 ? (
-            getTodosQuery.data
-              .sort((a, b) => {
-                return a.order - b.order;
-              })
-              .map((todo) => {
-                return <TodoItem todo={todo} key={todo.id} />;
-              })
+            getTodosQuery.data.map((todo) => {
+              return <TodoItem todo={todo} key={todo.id} />;
+            })
           ) : (
             <Box>No Todos Yet!</Box>
           )}
