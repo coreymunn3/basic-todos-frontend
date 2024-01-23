@@ -24,6 +24,7 @@ const TodoItem = (props) => {
   const { todo } = props;
   const toast = useToast();
   const queryClient = useQueryClient();
+
   const [newTitle, setNewTitle] = useState(todo.title);
   const initRef = useRef();
 
@@ -75,14 +76,21 @@ const TodoItem = (props) => {
     deleteTodoMutation.mutate(id);
   };
 
-  const handleEditChange = (e) => {
+  const handleUpdateTitle = (e) => {
     setNewTitle(e.target.value);
+  };
+
+  const handleUpdateCheck = (e) => {
+    handleEditTodo({
+      ...todo,
+      completed: e.target.checked,
+    });
   };
 
   return (
     <>
       <Flex>
-        <Checkbox colorScheme="green" value={todo.completed}>
+        <Checkbox defaultChecked={todo.completed} onChange={handleUpdateCheck}>
           {todo.title}
         </Checkbox>
         <Spacer />
@@ -99,7 +107,7 @@ const TodoItem = (props) => {
                   <PopoverHeader>Edit</PopoverHeader>
                   <PopoverBody>
                     <Stack direction={"row"}>
-                      <Input value={newTitle} onChange={handleEditChange} />
+                      <Input value={newTitle} onChange={handleUpdateTitle} />
                       <IconButton
                         icon={<CheckIcon />}
                         colorScheme="green"
