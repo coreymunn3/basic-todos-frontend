@@ -14,9 +14,16 @@ import {
   PopoverCloseButton,
   PopoverBody,
   Input,
+  Tooltip,
   useToast,
 } from "@chakra-ui/react";
-import { EditIcon, DeleteIcon, CheckIcon } from "@chakra-ui/icons";
+import {
+  EditIcon,
+  DeleteIcon,
+  CheckIcon,
+  TriangleUpIcon,
+  TriangleDownIcon,
+} from "@chakra-ui/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { editTodo, deleteTodo } from "../api";
 
@@ -90,9 +97,33 @@ const TodoItem = (props) => {
   return (
     <>
       <Flex>
-        <Checkbox defaultChecked={todo.completed} onChange={handleUpdateCheck}>
-          {todo.title}
-        </Checkbox>
+        <Stack direction={"row"} justifyContent="center" alignItems={"center"}>
+          <Flex direction="column" marginRight={"0.5rem"}>
+            <Tooltip label="Move Up">
+              <IconButton
+                variant={"ghost"}
+                color={"gray.300"}
+                size="xxs"
+                icon={<TriangleUpIcon />}
+              />
+            </Tooltip>
+            <Tooltip label="Move Down">
+              <IconButton
+                variant={"ghost"}
+                color={"gray.300"}
+                size="xxs"
+                icon={<TriangleDownIcon />}
+              />
+            </Tooltip>
+          </Flex>
+          <Checkbox
+            size={"lg"}
+            defaultChecked={todo.completed}
+            onChange={handleUpdateCheck}
+          >
+            {todo.title}
+          </Checkbox>
+        </Stack>
         <Spacer />
         <Stack direction={"row"}>
           <Popover initialFocusRef={initRef}>
